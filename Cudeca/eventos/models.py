@@ -14,6 +14,7 @@ class Evento(models.Model):
     lugar = models.CharField(max_length=LINK_MAX_LENGTH)
     recaudacion_objetivo = models.IntegerField()
     descripcion = models.CharField(max_length=DESCRIPTION_MAX_LENGTH)
+    imagen = models.ImageField()
     class Meta:
         abstract = True
 

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Inscripción | {{ marcha.lugar }}{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="{% url 'detalle_marcha' marcha.pk %}" style="color: #667eea; text-decoration: none;">← Volver al evento</a>
+</div>
+
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h1 style="font-size: 2rem; text-align: center; margin-bottom: 2rem;">Inscripción a la Marcha</h1>
+    
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 2rem;">
+        <h3>{{ marcha.lugar }}</h3>
+        <p><strong>📅</strong> {{ marcha.fecha|date:"d/m/Y H:i" }}</p>
+        <p><strong>💰</strong> Inscripción: €{{ marcha.precio_inscripcion }}</p>
+        <p><strong>📍</strong> Recorrido: {{ marcha.recorrido|truncatewords:15 }}</p>
+    </div>
+    
+    <form method="post" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        {% csrf_token %}
+        
+        <div>
+            <label for="nombre" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Nombre completo *</label>
+            <input type="text" id="nombre" name="nombre" required 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+        </div>
+        
+        <div>
+            <label for="email" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Email *</label>
+            <input type="email" id="email" name="email" required 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+            <small style="color: #666;">Recibirás tu dorsal y confirmación aquí</small>
+        </div>
+        
+        <div>
+            <label for="telefono" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+        </div>
+        
+        <div>
+            <label for="talla" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Talla de camiseta *</label>
+            <select id="talla" name="talla" required 
+                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                <option value="">-- Selecciona tu talla --</option>
+                {% for key, value in tallas.items %}
+                <option value="{{ key }}">{{ key }} - {{ value }}</option>
+                {% endfor %}
+            </select>
+            <small style="color: #666;">La camiseta se entregará el día del evento</small>
+        </div>
+        
+        <div style="background: #d1ecf1; padding: 1rem; border-radius: 5px; border-left: 4px solid #17a2b8;">
+            <p style="margin: 0;"><strong>Importante:</strong> Tu número de dorsal se asignará automáticamente. Recibirás un email con todos los detalles de tu inscripción.</p>
+        </div>
+        
+        <div style="background: #fff3cd; padding: 1rem; border-radius: 5px; border-left: 4px solid #ffc107;">
+            <p><strong>Nota:</strong> Al inscribirte estás contribuyendo a una causa benéfica. La inscripción es final y no reembolsable.</p>
+        </div>
+        
+        <div style="text-align: center;">
+            <button type="submit" class="btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                Confirmar Inscripción →
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

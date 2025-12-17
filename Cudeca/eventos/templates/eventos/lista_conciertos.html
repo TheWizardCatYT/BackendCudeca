@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Conciertos Benéficos{% endblock %}
+
+{% block content %}
+<h1 style="font-size: 2.5rem; margin-bottom: 2rem; text-align: center;">🎵 Conciertos Benéficos</h1>
+
+{% if conciertos %}
+<div class="grid">
+    {% for concierto in conciertos %}
+    <div class="card">
+        {% if concierto.imagen %}
+        <img src="{{ concierto.imagen.url }}" alt="{{ concierto.lugar }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 1rem;">
+        {% endif %}
+        <h3>{{ concierto.lugar }}</h3>
+        <p><strong>📅 Fecha:</strong> {{ concierto.fecha|date:"d/m/Y H:i" }}</p>
+        <p><strong>💰 Entrada:</strong> €{{ concierto.precio_entrada }}</p>
+        <p><strong>👥 Capacidad:</strong> {{ concierto.max_asistentes }} personas</p>
+        <p><strong>🪑 Configuración:</strong> {{ concierto.num_filas }} filas × {{ concierto.num_asientos }} asientos</p>
+        <p style="margin-top: 1rem;">{{ concierto.descripcion|truncatewords:20 }}</p>
+        
+        <div class="progress-bar" style="margin-top: 1rem;">
+            <div class="progress-fill" style="width: {{ concierto.porcentaje_recaudado }}%;"></div>
+        </div>
+        <p><small>€{{ concierto.recaudacion_actual }} de €{{ concierto.recaudacion_objetivo }}</small></p>
+        
+        <a href="{% url 'detalle_concierto' concierto.pk %}" class="btn" style="margin-top: 1rem; width: 100%;">Ver detalles →</a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card" style="text-align: center; padding: 3rem;">
+    <h2>No hay conciertos disponibles en este momento</h2>
+    <p>Vuelve pronto para ver nuevos eventos musicales</p>
+    <a href="{% url 'home' %}" class="btn" style="margin-top: 1rem;">Volver al inicio</a>
+</div>
+{% endif %}
+{% endblock %}

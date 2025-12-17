@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ rifa.premio }} | Rifa Benéfica{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="{% url 'lista_rifas' %}" style="color: #667eea; text-decoration: none;">← Volver a rifas</a>
+</div>
+
+<div class="card">
+    {% if rifa.imagen %}
+    <img src="{{ rifa.imagen.url }}" alt="{{ rifa.premio }}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 5px; margin-bottom: 2rem;">
+    {% endif %}
+    
+    <h1 style="font-size: 2.5rem; color: #333; margin-bottom: 1rem;">🎟️ {{ rifa.premio }}</h1>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div>
+            <p><strong>📅 Sorteo:</strong></p>
+            <p>{{ rifa.fecha|date:"d/m/Y H:i" }}</p>
+        </div>
+        <div>
+            <p><strong>💰 Precio boleto:</strong></p>
+            <p>€{{ rifa.precio_boleto }}</p>
+        </div>
+        <div>
+            <p><strong>🎫 Boletos vendidos:</strong></p>
+            <p>{{ rifa.boletos_vendidos }} de {{ rifa.max_boletos }}</p>
+        </div>
+        <div>
+            <p><strong>📍 Lugar:</strong></p>
+            <p>{{ rifa.lugar }}</p>
+        </div>
+    </div>
+    
+    <div style="margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Descripción del Premio</h3>
+        <p>{{ rifa.descripcion }}</p>
+    </div>
+    
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 5px; margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Recaudación</h3>
+        <div class="progress-bar" style="background-color: rgba(255,255,255,0.3);">
+            <div class="progress-fill" style="background: white; width: {{ rifa.porcentaje_recaudado }}%;"></div>
+        </div>
+        <p style="margin-top: 0.5rem;"><strong>€{{ rifa.recaudacion_actual }}</strong> de €{{ rifa.recaudacion_objetivo }} ({{ rifa.porcentaje_recaudado|floatformat:1 }}%)</p>
+    </div>
+    
+    {% if boletos_disponibles > 0 %}
+    <div style="background: #d4edda; padding: 1.5rem; border-radius: 5px; border-left: 4px solid #28a745; margin-bottom: 2rem;">
+        <p style="font-size: 1.2rem; margin: 0;"><strong>✓ Disponibles:</strong> {{ boletos_disponibles }} boletos</p>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="{% url 'comprar_boleto' rifa.pk %}" class="btn" style="font-size: 1.2rem; padding: 1rem 2rem;">
+            Comprar mi boleto →
+        </a>
+    </div>
+    {% else %}
+    <div style="background: #f8d7da; color: #721c24; padding: 1.5rem; border-radius: 5px; text-align: center;">
+        <h3>Boletos Agotados</h3>
+        <p>Todos los boletos para esta rifa ya han sido vendidos.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

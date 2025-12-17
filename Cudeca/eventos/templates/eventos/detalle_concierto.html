@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ concierto.lugar }} | Concierto Benéfico{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="{% url 'lista_conciertos' %}" style="color: #667eea; text-decoration: none;">← Volver a conciertos</a>
+</div>
+
+<div class="card">
+    {% if concierto.imagen %}
+    <img src="{{ concierto.imagen.url }}" alt="{{ concierto.lugar }}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 5px; margin-bottom: 2rem;">
+    {% endif %}
+    
+    <h1 style="font-size: 2.5rem; color: #333; margin-bottom: 1rem;">🎵 {{ concierto.lugar }}</h1>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div>
+            <p><strong>📅 Fecha:</strong></p>
+            <p>{{ concierto.fecha|date:"d/m/Y H:i" }}</p>
+        </div>
+        <div>
+            <p><strong>💰 Entrada:</strong></p>
+            <p>€{{ concierto.precio_entrada }}</p>
+        </div>
+        <div>
+            <p><strong>👥 Capacidad total:</strong></p>
+            <p>{{ concierto.max_asistentes }} personas</p>
+        </div>
+        <div>
+            <p><strong>🪑 Entradas disponibles:</strong></p>
+            <p style="color: {% if entradas_disponibles > 0 %}#28a745{% else %}#dc3545{% endif %}; font-weight: bold;">
+                {{ entradas_disponibles }}
+            </p>
+        </div>
+    </div>
+    
+    <div style="margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Descripción del Evento</h3>
+        <p>{{ concierto.descripcion }}</p>
+    </div>
+    
+    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 5px; margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Información del Recinto</h3>
+        <p><strong>Filas:</strong> {{ concierto.num_filas }}</p>
+        <p><strong>Asientos por fila:</strong> {{ concierto.num_asientos }}</p>
+        <p><strong>Configuración:</strong> Asientos numerados con selección de fila y asiento</p>
+    </div>
+    
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 5px; margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Recaudación</h3>
+        <div class="progress-bar" style="background-color: rgba(255,255,255,0.3);">
+            <div class="progress-fill" style="background: white; width: {{ concierto.porcentaje_recaudado }}%;"></div>
+        </div>
+        <p style="margin-top: 0.5rem;"><strong>€{{ concierto.recaudacion_actual }}</strong> de €{{ concierto.recaudacion_objetivo }} ({{ concierto.porcentaje_recaudado|floatformat:1 }}%)</p>
+    </div>
+    
+    {% if entradas_disponibles > 0 %}
+    <div style="background: #d4edda; padding: 1.5rem; border-radius: 5px; border-left: 4px solid #28a745; margin-bottom: 2rem;">
+        <p style="font-size: 1.2rem; margin: 0;"><strong>✓ Entradas disponibles</strong></p>
+        <p style="margin-top: 0.5rem;">Selecciona tu asiento preferido en el siguiente paso</p>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="{% url 'comprar_entrada_concierto' concierto.pk %}" class="btn" style="font-size: 1.2rem; padding: 1rem 2rem;">
+            Comprar entrada →
+        </a>
+    </div>
+    {% else %}
+    <div style="background: #f8d7da; color: #721c24; padding: 1.5rem; border-radius: 5px; text-align: center;">
+        <h3>Entradas Agotadas</h3>
+        <p>Este concierto ha alcanzado su capacidad máxima.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

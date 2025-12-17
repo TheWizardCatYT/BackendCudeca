@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Rifas Benéficas{% endblock %}
+
+{% block content %}
+<h1 style="font-size: 2.5rem; margin-bottom: 2rem; text-align: center;">🎟️ Rifas Benéficas</h1>
+
+{% if rifas %}
+<div class="grid">
+    {% for rifa in rifas %}
+    <div class="card">
+        {% if rifa.imagen %}
+        <img src="{{ rifa.imagen.url }}" alt="{{ rifa.premio }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 1rem;">
+        {% endif %}
+        <h3>{{ rifa.premio }}</h3>
+        <p><strong>📅 Sorteo:</strong> {{ rifa.fecha|date:"d/m/Y H:i" }}</p>
+        <p><strong>💰 Precio boleto:</strong> €{{ rifa.precio_boleto }}</p>
+        <p><strong>🎫 Disponibles:</strong> {{ rifa.max_boletos|add:"-"|add:rifa.boletos_vendidos }} de {{ rifa.max_boletos }}</p>
+        <p style="margin-top: 1rem;">{{ rifa.descripcion|truncatewords:20 }}</p>
+        
+        <div class="progress-bar" style="margin-top: 1rem;">
+            <div class="progress-fill" style="width: {{ rifa.porcentaje_recaudado }}%;"></div>
+        </div>
+        <p><small>€{{ rifa.recaudacion_actual }} de €{{ rifa.recaudacion_objetivo }}</small></p>
+        
+        {% if rifa.boletos_vendidos < rifa.max_boletos %}
+        <a href="{% url 'detalle_rifa' rifa.pk %}" class="btn" style="margin-top: 1rem; width: 100%;">Ver detalles →</a>
+        {% else %}
+        <button class="btn" style="margin-top: 1rem; width: 100%; background: #6c757d; cursor: not-allowed;" disabled>Agotado</button>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card" style="text-align: center; padding: 3rem;">
+    <h2>No hay rifas disponibles en este momento</h2>
+    <p>Vuelve pronto para ver nuevos sorteos</p>
+    <a href="{% url 'home' %}" class="btn" style="margin-top: 1rem;">Volver al inicio</a>
+</div>
+{% endif %}
+{% endblock %}

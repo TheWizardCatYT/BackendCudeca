@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Cenas Benéficas{% endblock %}
+
+{% block content %}
+<h1 style="font-size: 2.5rem; margin-bottom: 2rem; text-align: center;">🍽️ Cenas Benéficas</h1>
+
+{% if cenas %}
+<div class="grid">
+    {% for cena in cenas %}
+    <div class="card">
+        {% if cena.imagen %}
+        <img src="{{ cena.imagen.url }}" alt="{{ cena.lugar }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 1rem;">
+        {% endif %}
+        <h3>{{ cena.lugar }}</h3>
+        <p><strong>📅 Fecha:</strong> {{ cena.fecha|date:"d/m/Y H:i" }}</p>
+        <p><strong>💰 Precio:</strong> €{{ cena.precio_por_persona }}/persona</p>
+        <p><strong>🪑 Mesas:</strong> {{ cena.num_mesas }} mesas ({{ cena.num_asientos }} personas/mesa)</p>
+        <p style="margin-top: 1rem;">{{ cena.descripcion|truncatewords:20 }}</p>
+        
+        <div class="progress-bar" style="margin-top: 1rem;">
+            <div class="progress-fill" style="width: {{ cena.porcentaje_recaudado }}%;"></div>
+        </div>
+        <p><small>€{{ cena.recaudacion_actual }} de €{{ cena.recaudacion_objetivo }}</small></p>
+        
+        <a href="{% url 'detalle_cena' cena.pk %}" class="btn" style="margin-top: 1rem; width: 100%;">Ver detalles →</a>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card" style="text-align: center; padding: 3rem;">
+    <h2>No hay cenas disponibles en este momento</h2>
+    <p>Vuelve pronto para ver nuevos eventos</p>
+    <a href="{% url 'home' %}" class="btn" style="margin-top: 1rem;">Volver al inicio</a>
+</div>
+{% endif %}
+{% endblock %}

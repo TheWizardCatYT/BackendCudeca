@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Comprar Entrada | {{ concierto.lugar }}{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="{% url 'detalle_concierto' concierto.pk %}" style="color: #667eea; text-decoration: none;">← Volver al evento</a>
+</div>
+
+<div class="card" style="max-width: 700px; margin: 0 auto;">
+    <h1 style="font-size: 2rem; text-align: center; margin-bottom: 2rem;">Comprar Entrada de Concierto</h1>
+    
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 2rem;">
+        <h3>{{ concierto.lugar }}</h3>
+        <p><strong>📅</strong> {{ concierto.fecha|date:"d/m/Y H:i" }}</p>
+        <p><strong>💰</strong> Entrada: €{{ concierto.precio_entrada }}</p>
+    </div>
+    
+    <form method="post" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        {% csrf_token %}
+        
+        <div>
+            <label for="nombre" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Nombre completo *</label>
+            <input type="text" id="nombre" name="nombre" required 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+        </div>
+        
+        <div>
+            <label for="email" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Email *</label>
+            <input type="email" id="email" name="email" required 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+            <small style="color: #666;">Recibirás tu entrada aquí</small>
+        </div>
+        
+        <div>
+            <label for="telefono" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+                <label for="fila" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Fila *</label>
+                <input type="number" id="fila" name="fila" min="1" max="{{ concierto.num_filas }}" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                <small style="color: #666;">1 a {{ concierto.num_filas }}</small>
+            </div>
+            
+            <div>
+                <label for="asiento" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Asiento *</label>
+                <input type="number" id="asiento" name="asiento" min="1" max="{{ concierto.num_asientos }}" required 
+                       style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                <small style="color: #666;">1 a {{ concierto.num_asientos }}</small>
+            </div>
+        </div>
+        
+        <div style="background: #d1ecf1; padding: 1rem; border-radius: 5px; border-left: 4px solid #17a2b8;">
+            <p style="margin: 0;"><strong>Mapa de asientos:</strong></p>
+            <p style="margin-top: 0.5rem;">Escenario al frente. Las filas se numeran desde el frente (1) hasta atrás ({{ concierto.num_filas }}). Los asientos se numeran de izquierda a derecha.</p>
+        </div>
+        
+        {% if asientos_ocupados %}
+        <div style="background: #fff3cd; padding: 1rem; border-radius: 5px; border-left: 4px solid #ffc107;">
+            <p><strong>Asientos ya ocupados:</strong></p>
+            <div style="max-height: 100px; overflow-y: auto; margin-top: 0.5rem;">
+                {% for fila, asiento in asientos_ocupados %}
+                <span style="display: inline-block; background: #dc3545; color: white; padding: 0.25rem 0.5rem; border-radius: 3px; margin: 0.25rem; font-size: 0.9rem;">
+                    F{{ fila }}-A{{ asiento }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <div style="background: #fff3cd; padding: 1rem; border-radius: 5px; border-left: 4px solid #ffc107;">
+            <p><strong>Nota:</strong> Al comprar tu entrada, estás contribuyendo a una causa benéfica. Tu compra es final y no reembolsable. Por favor, verifica que el asiento seleccionado no esté ocupado.</p>
+        </div>
+        
+        <div style="text-align: center;">
+            <button type="submit" class="btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                Confirmar Compra →
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

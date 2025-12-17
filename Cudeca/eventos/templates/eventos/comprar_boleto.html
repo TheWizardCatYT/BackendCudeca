@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Comprar Boleto | {{ rifa.premio }}{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="{% url 'detalle_rifa' rifa.pk %}" style="color: #667eea; text-decoration: none;">← Volver al evento</a>
+</div>
+
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h1 style="font-size: 2rem; text-align: center; margin-bottom: 2rem;">Comprar Boleto de Rifa</h1>
+    
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 2rem;">
+        <h3>{{ rifa.premio }}</h3>
+        <p><strong>📅</strong> Sorteo: {{ rifa.fecha|date:"d/m/Y H:i" }}</p>
+        <p><strong>💰</strong> Precio: €{{ rifa.precio_boleto }}</p>
+        <p><strong>🎫</strong> Tu número será asignado automáticamente</p>
+    </div>
+    
+    <form method="post" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        {% csrf_token %}
+        
+        <div>
+            <label for="nombre" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Nombre completo *</label>
+            <input type="text" id="nombre" name="nombre" required 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+        </div>
+        
+        <div>
+            <label for="email" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Email *</label>
+            <input type="email" id="email" name="email" required 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+            <small style="color: #666;">Recibirás la confirmación en este correo</small>
+        </div>
+        
+        <div>
+            <label for="telefono" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+        </div>
+        
+        <div style="background: #d1ecf1; padding: 1rem; border-radius: 5px; border-left: 4px solid #17a2b8;">
+            <p style="margin: 0;"><strong>Importante:</strong> Tu número de boleto se generará automáticamente después de confirmar tu compra. Recibirás un email con tu número.</p>
+        </div>
+        
+        <div style="background: #fff3cd; padding: 1rem; border-radius: 5px; border-left: 4px solid #ffc107;">
+            <p><strong>Nota:</strong> Al comprar este boleto, estás contribuyendo a una causa benéfica. Tu compra es final y no reembolsable.</p>
+        </div>
+        
+        <div style="text-align: center;">
+            <button type="submit" class="btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                Confirmar Compra →
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

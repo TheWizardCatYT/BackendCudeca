@@ -3,14 +3,14 @@
 {% block title %}Conciertos Benéficos{% endblock %}
 
 {% block content %}
-<h1 style="font-size: 2.5rem; margin-bottom: 2rem; text-align: center;">🎵 Conciertos Benéficos</h1>
+<h1 style="font-size: 2.5rem; margin-bottom: 2rem; text-align: center; color: #2e8b00;">🎵 Conciertos Benéficos</h1>
 
 {% if conciertos %}
 <div class="grid">
     {% for concierto in conciertos %}
     <div class="card">
         {% if concierto.imagen %}
-        <img src="{{ concierto.imagen.url }}" alt="{{ concierto.lugar }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 1rem;">
+        <img src="{{ concierto.imagen.url }}" alt="{{ concierto.lugar }}">
         {% endif %}
         <h3>{{ concierto.lugar }}</h3>
         <p><strong>📅 Fecha:</strong> {{ concierto.fecha|date:"d/m/Y H:i" }}</p>
@@ -24,15 +24,16 @@
         </div>
         <p><small>€{{ concierto.recaudacion_actual }} de €{{ concierto.recaudacion_objetivo }}</small></p>
         
-        <a href="{% url 'detalle_concierto' concierto.pk %}" class="btn" style="margin-top: 1rem; width: 100%;">Ver detalles →</a>
+        <a href="{% url 'detalle_concierto' concierto.pk %}" class="btn-primary" style="margin-top: 1rem; display: block; text-align: center;">Ver detalles</a>
     </div>
     {% endfor %}
 </div>
 {% else %}
-<div class="card" style="text-align: center; padding: 3rem;">
-    <h2>No hay conciertos disponibles en este momento</h2>
+<div style="text-align: center; padding: 3rem;">
+    <h2 style="color: #2e8b00;">No hay conciertos disponibles en este momento</h2>
     <p>Vuelve pronto para ver nuevos eventos musicales</p>
-    <a href="{% url 'home' %}" class="btn" style="margin-top: 1rem;">Volver al inicio</a>
 </div>
 {% endif %}
+
+<a class="flechita" href="{% url 'home' %}"></a>
 {% endblock %}

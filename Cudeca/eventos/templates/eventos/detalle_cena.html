@@ -3,74 +3,70 @@
 {% block title %}{{ cena.lugar }} | Cena Benéfica{% endblock %}
 
 {% block content %}
-<div style="margin-bottom: 2rem;">
-    <a href="{% url 'lista_cenas' %}" style="color: #667eea; text-decoration: none;">← Volver a cenas</a>
+{% if cena.imagen %}
+<img src="{{ cena.imagen.url }}" alt="{{ cena.lugar }}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px; margin-bottom: 2rem;">
+{% endif %}
+
+<h1 style="font-size: 2.5rem; color: #2e8b00; margin-bottom: 1rem; text-align: center;">🍽️ {{ cena.lugar }}</h1>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; border: 2px solid #2e8b00; text-align: center;">
+        <p style="color: #2e8b00;"><strong>📅 Fecha</strong></p>
+        <p>{{ cena.fecha|date:"d/m/Y H:i" }}</p>
+    </div>
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; border: 2px solid #2e8b00; text-align: center;">
+        <p style="color: #2e8b00;"><strong>💰 Precio</strong></p>
+        <p>€{{ cena.precio_por_persona }} /persona</p>
+    </div>
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; border: 2px solid #2e8b00; text-align: center;">
+        <p style="color: #2e8b00;"><strong>🪑 Mesas</strong></p>
+        <p>{{ cena.num_mesas }} mesas</p>
+    </div>
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; border: 2px solid #2e8b00; text-align: center;">
+        <p style="color: #2e8b00;"><strong>👥 Asientos/mesa</strong></p>
+        <p>{{ cena.num_asientos }} personas</p>
+    </div>
 </div>
 
-<div class="card">
-    {% if cena.imagen %}
-    <img src="{{ cena.imagen.url }}" alt="{{ cena.lugar }}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 5px; margin-bottom: 2rem;">
-    {% endif %}
-    
-    <h1 style="font-size: 2.5rem; color: #333; margin-bottom: 1rem;">🍽️ {{ cena.lugar }}</h1>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-        <div>
-            <p><strong>📅 Fecha:</strong></p>
-            <p>{{ cena.fecha|date:"d/m/Y H:i" }}</p>
-        </div>
-        <div>
-            <p><strong>💰 Precio:</strong></p>
-            <p>€{{ cena.precio_por_persona }} por persona</p>
-        </div>
-        <div>
-            <p><strong>🪑 Mesas:</strong></p>
-            <p>{{ cena.num_mesas }} mesas disponibles</p>
-        </div>
-        <div>
-            <p><strong>👥 Asientos por mesa:</strong></p>
-            <p>{{ cena.num_asientos }} personas</p>
-        </div>
-    </div>
-    
-    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 5px; margin-bottom: 2rem;">
-        <h3 style="margin-bottom: 1rem;">Menú</h3>
-        <p style="white-space: pre-line;">{{ cena.menu }}</p>
-    </div>
-    
-    <div style="margin-bottom: 2rem;">
-        <h3 style="margin-bottom: 1rem;">Descripción del Evento</h3>
-        <p>{{ cena.descripcion }}</p>
-    </div>
-    
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 5px; margin-bottom: 2rem;">
-        <h3 style="margin-bottom: 1rem;">Recaudación</h3>
-        <div class="progress-bar" style="background-color: rgba(255,255,255,0.3);">
-            <div class="progress-fill" style="background: white; width: {{ cena.porcentaje_recaudado }}%;"></div>
-        </div>
-        <p style="margin-top: 0.5rem;"><strong>€{{ cena.recaudacion_actual }}</strong> de €{{ cena.recaudacion_objetivo }} ({{ cena.porcentaje_recaudado|floatformat:1 }}%)</p>
-    </div>
-    
-    <h3 style="margin-bottom: 1rem;">Disponibilidad de Mesas</h3>
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-        {% for mesa in mesas %}
-        <div style="padding: 1rem; border: 2px solid {% if mesa.asientos_disponibles > 0 %}#28a745{% else %}#dc3545{% endif %}; border-radius: 5px; text-align: center;">
-            <p style="font-weight: bold; font-size: 1.2rem;">Mesa {{ mesa.num_mesa }}</p>
-            <p style="color: {% if mesa.asientos_disponibles > 0 %}#28a745{% else %}#dc3545{% endif %};">
-                {% if mesa.asientos_disponibles > 0 %}
-                    ✓ {{ mesa.asientos_disponibles }} asientos disponibles
-                {% else %}
-                    ✗ Completa
-                {% endif %}
-            </p>
-        </div>
-        {% endfor %}
-    </div>
-    
-    <div style="text-align: center;">
-        <a href="{% url 'comprar_entrada_cena' cena.pk %}" class="btn" style="font-size: 1.2rem; padding: 1rem 2rem;">
-            Reservar mi entrada →
-        </a>
-    </div>
+<div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border: 2px solid #2e8b00;">
+    <h3 style="margin-bottom: 1rem; color: #2e8b00;">Menú</h3>
+    <p style="white-space: pre-line;">{{ cena.menu }}</p>
 </div>
+
+<div style="margin-bottom: 2rem;">
+    <h3 style="margin-bottom: 1rem; color: #2e8b00;">Descripción del Evento</h3>
+    <p>{{ cena.descripcion }}</p>
+</div>
+
+<div style="background: linear-gradient(to bottom, rgba(51, 249, 51, 1), rgba(35, 129, 1, 1)); color: white; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+    <h3 style="margin-bottom: 1rem; color: white;">Recaudación</h3>
+    <div class="progress-bar" style="background-color: rgba(255,255,255,0.3);">
+        <div class="progress-fill" style="background: white; width: {{ cena.porcentaje_recaudado }}%;"></div>
+    </div>
+    <p style="margin-top: 0.5rem;"><strong>€{{ cena.recaudacion_actual }}</strong> de €{{ cena.recaudacion_objetivo }} ({{ cena.porcentaje_recaudado|floatformat:1 }}%)</p>
+</div>
+
+<h3 style="margin-bottom: 1rem; color: #2e8b00;">Disponibilidad de Mesas</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+    {% for mesa in mesas %}
+    <div style="padding: 1rem; border: 2px solid {% if mesa.asientos_disponibles > 0 %}#2e8b00{% else %}#dc3545{% endif %}; border-radius: 10px; text-align: center; background: {% if mesa.asientos_disponibles > 0 %}rgba(51, 249, 51, 0.1){% else %}#ffebee{% endif %};">
+        <p style="font-weight: bold; font-size: 1.2rem; color: {% if mesa.asientos_disponibles > 0 %}#2e8b00{% else %}#dc3545{% endif %};">Mesa {{ mesa.num_mesa }}</p>
+        <p style="color: {% if mesa.asientos_disponibles > 0 %}#2e8b00{% else %}#dc3545{% endif %};">
+            {% if mesa.asientos_disponibles > 0 %}
+                ✓ {{ mesa.asientos_disponibles }} disponibles
+            {% else %}
+                ✗ Completa
+            {% endif %}
+        </p>
+    </div>
+    {% endfor %}
+</div>
+
+<div style="text-align: center;">
+    <a href="{% url 'comprar_entrada_cena' cena.pk %}" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+        Reservar mi entrada
+    </a>
+</div>
+
+<a class="flechita" href="{% url 'lista_cenas' %}"></a>
 {% endblock %}

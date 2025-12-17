@@ -3,71 +3,67 @@
 {% block title %}{{ marcha.lugar }} | Marcha Benéfica{% endblock %}
 
 {% block content %}
-<div style="margin-bottom: 2rem;">
-    <a href="{% url 'lista_marchas' %}" style="color: #667eea; text-decoration: none;">← Volver a marchas</a>
+{% if marcha.imagen %}
+<img src="{{ marcha.imagen.url }}" alt="{{ marcha.lugar }}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 10px; margin-bottom: 2rem;">
+{% endif %}
+
+<h1 style="font-size: 2.5rem; color: #2e8b00; margin-bottom: 1rem; text-align: center;">🏃 {{ marcha.lugar }}</h1>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; border: 2px solid #2e8b00; text-align: center;">
+        <p style="color: #2e8b00;"><strong>📅 Fecha</strong></p>
+        <p>{{ marcha.fecha|date:"d/m/Y H:i" }}</p>
+    </div>
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; border: 2px solid #2e8b00; text-align: center;">
+        <p style="color: #2e8b00;"><strong>💰 Inscripción</strong></p>
+        <p>€{{ marcha.precio_inscripcion }}</p>
+    </div>
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; border: 2px solid #2e8b00; text-align: center;">
+        <p style="color: #2e8b00;"><strong>👥 Max participantes</strong></p>
+        <p>{{ marcha.max_participantes }}</p>
+    </div>
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 10px; border: 2px solid #2e8b00; text-align: center;">
+        <p style="color: #2e8b00;"><strong>📍 Plazas disponibles</strong></p>
+        <p style="color: {% if plazas_disponibles > 0 %}#2e8b00{% else %}#dc3545{% endif %}; font-weight: bold;">
+            {{ plazas_disponibles }}
+        </p>
+    </div>
 </div>
 
-<div class="card">
-    {% if marcha.imagen %}
-    <img src="{{ marcha.imagen.url }}" alt="{{ marcha.lugar }}" style="width: 100%; max-height: 400px; object-fit: cover; border-radius: 5px; margin-bottom: 2rem;">
-    {% endif %}
-    
-    <h1 style="font-size: 2.5rem; color: #333; margin-bottom: 1rem;">🏃 {{ marcha.lugar }}</h1>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-        <div>
-            <p><strong>📅 Fecha:</strong></p>
-            <p>{{ marcha.fecha|date:"d/m/Y H:i" }}</p>
-        </div>
-        <div>
-            <p><strong>💰 Inscripción:</strong></p>
-            <p>€{{ marcha.precio_inscripcion }}</p>
-        </div>
-        <div>
-            <p><strong>👥 Max participantes:</strong></p>
-            <p>{{ marcha.max_participantes }}</p>
-        </div>
-        <div>
-            <p><strong>📍 Plazas disponibles:</strong></p>
-            <p style="color: {% if plazas_disponibles > 0 %}#28a745{% else %}#dc3545{% endif %}; font-weight: bold;">
-                {{ plazas_disponibles }}
-            </p>
-        </div>
-    </div>
-    
-    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 5px; margin-bottom: 2rem;">
-        <h3 style="margin-bottom: 1rem;">Recorrido</h3>
-        <p style="white-space: pre-line;">{{ marcha.recorrido }}</p>
-    </div>
-    
-    <div style="margin-bottom: 2rem;">
-        <h3 style="margin-bottom: 1rem;">Descripción del Evento</h3>
-        <p>{{ marcha.descripcion }}</p>
-    </div>
-    
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 5px; margin-bottom: 2rem;">
-        <h3 style="margin-bottom: 1rem;">Recaudación</h3>
-        <div class="progress-bar" style="background-color: rgba(255,255,255,0.3);">
-            <div class="progress-fill" style="background: white; width: {{ marcha.porcentaje_recaudado }}%;"></div>
-        </div>
-        <p style="margin-top: 0.5rem;"><strong>€{{ marcha.recaudacion_actual }}</strong> de €{{ marcha.recaudacion_objetivo }} ({{ marcha.porcentaje_recaudado|floatformat:1 }}%)</p>
-    </div>
-    
-    <div style="background: #fff3cd; padding: 1rem; border-radius: 5px; border-left: 4px solid #ffc107; margin-bottom: 2rem;">
-        <p><strong>Nota:</strong> Al inscribirte recibirás un dorsal con número único y una camiseta del evento. Por favor, selecciona tu talla correctamente.</p>
-    </div>
-    
-    {% if plazas_disponibles > 0 %}
-    <div style="text-align: center;">
-        <a href="{% url 'inscribir_marcha' marcha.pk %}" class="btn" style="font-size: 1.2rem; padding: 1rem 2rem;">
-            Inscribirme ahora →
-        </a>
-    </div>
-    {% else %}
-    <div style="background: #f8d7da; color: #721c24; padding: 1.5rem; border-radius: 5px; text-align: center;">
-        <h3>Inscripciones Cerradas</h3>
-        <p>Se ha alcanzado el número máximo de participantes.</p>
-    </div>
-    {% endif %}
+<div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border: 2px solid #2e8b00;">
+    <h3 style="margin-bottom: 1rem; color: #2e8b00;">Recorrido</h3>
+    <p style="white-space: pre-line;">{{ marcha.recorrido }}</p>
 </div>
+
+<div style="margin-bottom: 2rem;">
+    <h3 style="margin-bottom: 1rem; color: #2e8b00;">Descripción del Evento</h3>
+    <p>{{ marcha.descripcion }}</p>
+</div>
+
+<div style="background: linear-gradient(to bottom, rgba(51, 249, 51, 1), rgba(35, 129, 1, 1)); color: white; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+    <h3 style="margin-bottom: 1rem; color: white;">Recaudación</h3>
+    <div class="progress-bar" style="background-color: rgba(255,255,255,0.3);">
+        <div class="progress-fill" style="background: white; width: {{ marcha.porcentaje_recaudado }}%;"></div>
+    </div>
+    <p style="margin-top: 0.5rem;"><strong>€{{ marcha.recaudacion_actual }}</strong> de €{{ marcha.recaudacion_objetivo }} ({{ marcha.porcentaje_recaudado|floatformat:1 }}%)</p>
+</div>
+
+<div style="background: rgba(51, 249, 51, 0.2); padding: 1rem; border-radius: 10px; border-left: 4px solid #2e8b00; margin-bottom: 2rem;">
+    <p><strong>Nota:</strong> Al inscribirte recibirás un dorsal con número único y una camiseta del evento. Por favor, selecciona tu talla correctamente.</p>
+</div>
+
+{% if plazas_disponibles > 0 %}
+<div style="text-align: center;">
+    <a href="{% url 'inscribir_marcha' marcha.pk %}" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+        Inscribirme ahora
+    </a>
+</div>
+{% else %}
+<div style="background: #f8d7da; color: #721c24; padding: 1.5rem; border-radius: 10px; text-align: center; border: 2px solid #dc3545;">
+    <h3>Inscripciones Cerradas</h3>
+    <p>Se ha alcanzado el número máximo de participantes.</p>
+</div>
+{% endif %}
+
+<a class="flechita" href="{% url 'lista_marchas' %}"></a>
 {% endblock %}

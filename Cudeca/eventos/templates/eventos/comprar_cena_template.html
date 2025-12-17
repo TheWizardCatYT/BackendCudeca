@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Comprar Entrada | {{ cena.lugar }}{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <a href="{% url 'detalle_cena' cena.pk %}" style="color: #667eea; text-decoration: none;">← Volver al evento</a>
+</div>
+
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h1 style="font-size: 2rem; text-align: center; margin-bottom: 2rem;">Reservar Entrada para Cena</h1>
+    
+    <div style="background: #f8f9fa; padding: 1rem; border-radius: 5px; margin-bottom: 2rem;">
+        <h3>{{ cena.lugar }}</h3>
+        <p><strong>📅</strong> {{ cena.fecha|date:"d/m/Y H:i" }}</p>
+        <p><strong>💰</strong> €{{ cena.precio_por_persona }} por persona</p>
+    </div>
+    
+    {% if mesas_disponibles %}
+    <form method="post" style="display: flex; flex-direction: column; gap: 1.5rem;">
+        {% csrf_token %}
+        
+        <div>
+            <label for="nombre" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Nombre completo *</label>
+            <input type="text" id="nombre" name="nombre" required 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+        </div>
+        
+        <div>
+            <label for="email" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Email *</label>
+            <input type="email" id="email" name="email" required 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+        </div>
+        
+        <div>
+            <label for="telefono" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Teléfono</label>
+            <input type="tel" id="telefono" name="telefono" 
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+        </div>
+        
+        <div>
+            <label for="mesa" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Selecciona tu mesa *</label>
+            <select id="mesa" name="mesa" required 
+                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                <option value="">-- Selecciona una mesa --</option>
+                {% for mesa in mesas_disponibles %}
+                <option value="{{ mesa.pk }}">
+                    Mesa {{ mesa.num_mesa }} - {{ mesa.asientos_disponibles }} asientos disponibles
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div style="background: #fff3cd; padding: 1rem; border-radius: 5px; border-left: 4px solid #ffc107;">
+            <p><strong>Nota:</strong> Al reservar tu entrada, estás contribuyendo a una causa benéfica. Tu compra es final y no reembolsable.</p>
+        </div>
+        
+        <div style="text-align: center;">
+            <button type="submit" class="btn" style="font-size: 1.1rem; padding: 1rem 2rem;">
+                Confirmar Reserva →
+            </button>
+        </div>
+    </form>
+    {% else %}
+    <div style="background: #f8d7da; color: #721c24; padding: 1.5rem; border-radius: 5px; text-align: center;">
+        <h3>Lo sentimos</h3>
+        <p>No hay mesas disponibles en este momento.</p>
+        <a href="{% url 'detalle_cena' cena.pk %}" class="btn" style="margin-top: 1rem;">Volver al evento</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio | Eventos Benéficos{% endblock %}
+
+{% block content %}
+<div class="hero" style="text-align: center; padding: 3rem 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; margin-bottom: 3rem;">
+    <h1 style="font-size: 3rem; margin-bottom: 1rem;">Eventos que Transforman Vidas</h1>
+    <p style="font-size: 1.3rem; margin-bottom: 2rem;">Participa en nuestros eventos benéficos y ayuda a quienes más lo necesitan</p>
+</div>
+
+{% if cenas %}
+<section style="margin-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 2rem; color: #333;">🍽️ Próximas Cenas</h2>
+        <a href="{% url 'lista_cenas' %}" class="btn btn-secondary">Ver todas</a>
+    </div>
+    <div class="grid">
+        {% for cena in cenas %}
+        <div class="card">
+            {% if cena.imagen %}
+            <img src="{{ cena.imagen.url }}" alt="{{ cena.lugar }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 1rem;">
+            {% endif %}
+            <h3>{{ cena.lugar }}</h3>
+            <p><strong>📅 Fecha:</strong> {{ cena.fecha|date:"d/m/Y H:i" }}</p>
+            <p><strong>💰 Precio:</strong> €{{ cena.precio_por_persona }}/persona</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ cena.porcentaje_recaudado }}%;"></div>
+            </div>
+            <p><small>€{{ cena.recaudacion_actual }} de €{{ cena.recaudacion_objetivo }}</small></p>
+            <a href="{% url 'detalle_cena' cena.pk %}" class="btn" style="margin-top: 1rem;">Ver detalles</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if rifas %}
+<section style="margin-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 2rem; color: #333;">🎟️ Rifas Activas</h2>
+        <a href="{% url 'lista_rifas' %}" class="btn btn-secondary">Ver todas</a>
+    </div>
+    <div class="grid">
+        {% for rifa in rifas %}
+        <div class="card">
+            {% if rifa.imagen %}
+            <img src="{{ rifa.imagen.url }}" alt="{{ rifa.premio }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 1rem;">
+            {% endif %}
+            <h3>{{ rifa.premio }}</h3>
+            <p><strong>📅 Sorteo:</strong> {{ rifa.fecha|date:"d/m/Y" }}</p>
+            <p><strong>💰 Boleto:</strong> €{{ rifa.precio_boleto }}</p>
+            <p><strong>🎫 Vendidos:</strong> {{ rifa.boletos_vendidos }}/{{ rifa.max_boletos }}</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ rifa.porcentaje_recaudado }}%;"></div>
+            </div>
+            <p><small>€{{ rifa.recaudacion_actual }} de €{{ rifa.recaudacion_objetivo }}</small></p>
+            <a href="{% url 'detalle_rifa' rifa.pk %}" class="btn" style="margin-top: 1rem;">Ver detalles</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if marchas %}
+<section style="margin-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 2rem; color: #333;">🏃 Próximas Marchas</h2>
+        <a href="{% url 'lista_marchas' %}" class="btn btn-secondary">Ver todas</a>
+    </div>
+    <div class="grid">
+        {% for marcha in marchas %}
+        <div class="card">
+            {% if marcha.imagen %}
+            <img src="{{ marcha.imagen.url }}" alt="{{ marcha.lugar }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 1rem;">
+            {% endif %}
+            <h3>{{ marcha.lugar }}</h3>
+            <p><strong>📅 Fecha:</strong> {{ marcha.fecha|date:"d/m/Y H:i" }}</p>
+            <p><strong>💰 Inscripción:</strong> €{{ marcha.precio_inscripcion }}</p>
+            <p><strong>📍 Recorrido:</strong> {{ marcha.recorrido|truncatewords:10 }}</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ marcha.porcentaje_recaudado }}%;"></div>
+            </div>
+            <p><small>€{{ marcha.recaudacion_actual }} de €{{ marcha.recaudacion_objetivo }}</small></p>
+            <a href="{% url 'detalle_marcha' marcha.pk %}" class="btn" style="margin-top: 1rem;">Ver detalles</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if conciertos %}
+<section style="margin-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 2rem; color: #333;">🎵 Próximos Conciertos</h2>
+        <a href="{% url 'lista_conciertos' %}" class="btn btn-secondary">Ver todos</a>
+    </div>
+    <div class="grid">
+        {% for concierto in conciertos %}
+        <div class="card">
+            {% if concierto.imagen %}
+            <img src="{{ concierto.imagen.url }}" alt="{{ concierto.lugar }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 1rem;">
+            {% endif %}
+            <h3>{{ concierto.lugar }}</h3>
+            <p><strong>📅 Fecha:</strong> {{ concierto.fecha|date:"d/m/Y H:i" }}</p>
+            <p><strong>💰 Entrada:</strong> €{{ concierto.precio_entrada }}</p>
+            <p><strong>👥 Capacidad:</strong> {{ concierto.max_asistentes }} personas</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ concierto.porcentaje_recaudado }}%;"></div>
+            </div>
+            <p><small>€{{ concierto.recaudacion_actual }} de €{{ concierto.recaudacion_objetivo }}</small></p>
+            <a href="{% url 'detalle_concierto' concierto.pk %}" class="btn" style="margin-top: 1rem;">Ver detalles</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if not cenas and not rifas and not marchas and not conciertos %}
+<div class="card" style="text-align: center; padding: 3rem;">
+    <h2>No hay eventos próximos en este momento</h2>
+    <p>Vuelve pronto para ver nuevos eventos benéficos</p>
+</div>
+{% endif %}
+{% endblock %}

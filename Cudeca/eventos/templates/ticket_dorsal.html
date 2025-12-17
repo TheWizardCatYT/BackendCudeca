@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Dorsal - {{ marcha.lugar }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, rgba(51, 249, 51, 1) 5%, rgba(35, 129, 1, 1) 30%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .ticket-container {
+            background: white;
+            max-width: 800px;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .ticket-header {
+            background: linear-gradient(to right, #2e8b00, rgba(51, 249, 51, 1));
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .ticket-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .bib-number {
+            font-size: 4rem;
+            font-weight: bold;
+            background: white;
+            color: #2e8b00;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px auto;
+            display: inline-block;
+            min-width: 200px;
+            border: 5px solid #2e8b00;
+        }
+        
+        .ticket-body {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+        
+        .ticket-info {
+            border-right: 2px dashed #2e8b00;
+            padding-right: 30px;
+        }
+        
+        .info-section {
+            margin-bottom: 20px;
+        }
+        
+        .info-section h3 {
+            color: #2e8b00;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #2e8b00;
+            padding-bottom: 5px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .info-value {
+            color: #333;
+        }
+        
+        .tshirt-size {
+            background: #2e8b00;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .ticket-qr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            border: 3px solid #2e8b00;
+            border-radius: 10px;
+            padding: 10px;
+            background: white;
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .ticket-id {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .status-valid {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-used {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .ticket-footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px dashed #2e8b00;
+        }
+        
+        .print-button {
+            background: linear-gradient(to bottom, rgba(51, 190, 51, 1), rgba(35, 129, 1, 1));
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .print-button:hover {
+            opacity: 0.9;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .print-button {
+                display: none;
+            }
+            .ticket-container {
+                box-shadow: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .ticket-body {
+                grid-template-columns: 1fr;
+            }
+            .ticket-info {
+                border-right: none;
+                border-bottom: 2px dashed #2e8b00;
+                padding-right: 0;
+                padding-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-container">
+        <div class="ticket-header">
+            <h1>🏃 DORSAL DE MARCHA</h1>
+            <div class="bib-number">
+                {{ dorsal.num }}
+            </div>
+            <p style="font-size: 1.1rem;">{{ marcha.lugar }}</p>
+            <span class="status-badge {% if dorsal.usado %}status-used{% else %}status-valid{% endif %}">
+                {% if dorsal.usado %}✗ REGISTRADO{% else %}✓ VÁLIDO{% endif %}
+            </span>
+        </div>
+        
+        <div class="ticket-body">
+            <div class="ticket-info">
+                <div class="info-section">
+                    <h3>📋 Información del Participante</h3>
+                    <div class="info-row">
+                        <span class="info-label">Nombre:</span>
+                        <span class="info-value">{{ dorsal.nombre }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">{{ dorsal.email }}</span>
+                    </div>
+                    {% if dorsal.telefono %}
+                    <div class="info-row">
+                        <span class="info-label">Teléfono:</span>
+                        <span class="info-value">{{ dorsal.telefono }}</span>
+                    </div>
+                    {% endif %}
+                    <div style="margin-top: 15px;">
+                        <span class="info-label">Talla de camiseta:</span>
+                        <span class="tshirt-size">{{ dorsal.talla }}</span>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <h3>🏁 Detalles de la Marcha</h3>
+                    <div class="info-row">
+                        <span class="info-label">Número de dorsal:</span>
+                        <span class="info-value" style="font-weight: bold; color: #2e8b00; font-size: 1.2rem;">{{ dorsal.num }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Fecha del evento:</span>
+                        <span class="info-value">{{ marcha.fecha|date:"d/m/Y H:i" }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Lugar:</span>
+                        <span class="info-value">{{ marcha.lugar }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Recorrido:</span>
+                        <span class="info-value">{{ marcha.recorrido|truncatewords:5 }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Fecha de inscripción:</span>
+                        <span class="info-value">{{ dorsal.fecha_compra|date:"d/m/Y H:i" }}</span>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <h3>ℹ️ Información Importante</h3>
+                    <p style="font-size: 0.9rem; color: #666; line-height: 1.6;">
+                        • Recoge tu dorsal y camiseta antes del evento<br>
+                        • Lleva el código QR para registro<br>
+                        • Llega con 30 min de antelación<br>
+                        • ¡Disfruta de la marcha! 🎽
+                    </p>
+                </div>
+            </div>
+            
+            <div class="ticket-qr">
+                <div class="qr-code">
+                    <img src="{{ qr_code }}" alt="QR Code">
+                </div>
+                <div class="ticket-id">
+                    ID: #{{ dorsal.pk }}
+                </div>
+                <p style="font-size: 0.8rem; color: #666; text-align: center; margin-top: 10px;">
+                    Escanea este código<br>para verificar
+                </p>
+            </div>
+        </div>
+        
+        <div class="ticket-footer">
+            <p style="margin-bottom: 15px; color: #2e8b00; font-weight: bold;">
+                Gracias por contribuir a nuestra causa benéfica
+            </p>
+            <button onclick="window.print()" class="print-button">🖨️ Imprimir Dorsal</button>
+            <a href="{% url 'home' %}" class="print-button">🏠 Volver al Inicio</a>
+        </div>
+    </div>
+</body>
+</html>

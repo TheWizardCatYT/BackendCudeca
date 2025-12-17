@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import tickets
 
 urlpatterns = [
     # Página principal
@@ -22,4 +23,18 @@ urlpatterns = [
     path('rifa/<int:pk>/comprar/', views.comprar_boleto, name='comprar_boleto'),
     path('marcha/<int:pk>/inscribir/', views.inscribir_marcha, name='inscribir_marcha'),
     path('concierto/<int:pk>/comprar/', views.comprar_entrada_concierto, name='comprar_entrada_concierto'),
+
+    # ========== NEW SECTION BELOW ==========
+
+    # Tickets (visualización)
+    path('ticket/cena/<int:pk>/', tickets.ticket_entrada_cena, name='ticket_entrada_cena'),
+    path('ticket/boleto/<int:pk>/', tickets.ticket_boleto, name='ticket_boleto'),
+    path('ticket/dorsal/<int:pk>/', tickets.ticket_dorsal, name='ticket_dorsal'),
+    path('ticket/concierto/<int:pk>/', tickets.ticket_concierto, name='ticket_concierto'),
+
+    # Verificación de tickets
+    path('verificar/cena/<int:pk>/', tickets.verificar_ticket_cena, name='verificar_ticket_cena'),
+    path('verificar/boleto/<int:pk>/', tickets.verificar_ticket_boleto, name='verificar_ticket_boleto'),
+    path('verificar/dorsal/<int:pk>/', tickets.verificar_ticket_dorsal, name='verificar_ticket_dorsal'),
+    path('verificar/concierto/<int:pk>/', tickets.verificar_ticket_concierto, name='verificar_ticket_concierto'),
 ]

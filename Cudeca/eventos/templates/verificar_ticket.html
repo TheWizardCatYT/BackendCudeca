@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block title %}Verificar Ticket{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    <h1 style="font-size: 2rem; text-align: center; margin-bottom: 2rem; color: #2e8b00;">🔍 Verificar Ticket</h1>
+    
+    {% if entrada %}
+        <div style="background: {% if entrada.usado %}#f8d7da{% else %}#d4edda{% endif %}; padding: 2rem; border-radius: 10px; margin-bottom: 2rem; border: 3px solid {% if entrada.usado %}#dc3545{% else %}#2e8b00{% endif %}; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">
+                {% if entrada.usado %}
+                    ❌
+                {% else %}
+                    ✅
+                {% endif %}
+            </div>
+            <h2 style="color: {% if entrada.usado %}#721c24{% else %}#155724{% endif %}; margin-bottom: 1rem;">
+                {% if entrada.usado %}
+                    TICKET YA USADO
+                {% else %}
+                    TICKET VÁLIDO
+                {% endif %}
+            </h2>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border: 2px solid #2e8b00;">
+            <h3 style="color: #2e8b00; margin-bottom: 1rem;">{{ tipo }}</h3>
+            
+            <div style="margin-bottom: 1rem;">
+                <strong>Nombre:</strong> {{ entrada.nombre }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Email:</strong> {{ entrada.email }}
+            </div>
+            
+            {% if cena %}
+                <div style="margin-bottom: 1rem;">
+                    <strong>Evento:</strong> {{ cena.lugar }}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Mesa:</strong> {{ entrada.mesa.num_mesa }}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <strong>Fecha:</strong> {{ cena.fecha|date:"d/m/Y H:i" }}
+                </div>
+            {% endif %}
+            
+            <div style="margin-bottom: 1rem;">
+                <strong>Fecha de compra:</strong> {{ entrada.fecha_compra|date:"d/m/Y H:i" }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>ID Ticket:</strong> #{{ entrada.pk }}
+            </div>
+        </div>
+        
+        {% if not entrada.usado %}
+        <form method="post" style="text-align: center;">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                ✓ Marcar como Usado
+            </button>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
+                Esta acción registrará que el ticket ha sido utilizado
+            </p>
+        </form>
+        {% else %}
+        <div style="text-align: center;">
+            <p style="color: #721c24; font-weight: bold;">
+                Este ticket fue usado el {{ entrada.fecha_compra|date:"d/m/Y H:i" }}
+            </p>
+        </div>
+        {% endif %}
+        
+    {% elif boleto %}
+        <div style="background: {% if boleto.usado %}#f8d7da{% else %}#d4edda{% endif %}; padding: 2rem; border-radius: 10px; margin-bottom: 2rem; border: 3px solid {% if boleto.usado %}#dc3545{% else %}#2e8b00{% endif %}; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">
+                {% if boleto.usado %}
+                    ❌
+                {% else %}
+                    ✅
+                {% endif %}
+            </div>
+            <h2 style="color: {% if boleto.usado %}#721c24{% else %}#155724{% endif %}; margin-bottom: 1rem;">
+                {% if boleto.usado %}
+                    BOLETO YA CANJEADO
+                {% else %}
+                    BOLETO VÁLIDO
+                {% endif %}
+            </h2>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border: 2px solid #2e8b00;">
+            <h3 style="color: #2e8b00; margin-bottom: 1rem;">{{ tipo }}</h3>
+            
+            <div style="margin-bottom: 1rem;">
+                <strong>Nombre:</strong> {{ boleto.nombre }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Número de boleto:</strong> <span style="font-size: 1.5rem; color: #2e8b00; font-weight: bold;">#{{ boleto.num }}</span>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Rifa:</strong> {{ rifa.premio }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Fecha de sorteo:</strong> {{ rifa.fecha|date:"d/m/Y H:i" }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>ID Ticket:</strong> #{{ boleto.pk }}
+            </div>
+        </div>
+        
+        {% if not boleto.usado %}
+        <form method="post" style="text-align: center;">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                ✓ Marcar como Canjeado
+            </button>
+        </form>
+        {% endif %}
+        
+    {% elif dorsal %}
+        <div style="background: {% if dorsal.usado %}#f8d7da{% else %}#d4edda{% endif %}; padding: 2rem; border-radius: 10px; margin-bottom: 2rem; border: 3px solid {% if dorsal.usado %}#dc3545{% else %}#2e8b00{% endif %}; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">
+                {% if dorsal.usado %}
+                    ❌
+                {% else %}
+                    ✅
+                {% endif %}
+            </div>
+            <h2 style="color: {% if dorsal.usado %}#721c24{% else %}#155724{% endif %}; margin-bottom: 1rem;">
+                {% if dorsal.usado %}
+                    DORSAL YA REGISTRADO
+                {% else %}
+                    DORSAL VÁLIDO
+                {% endif %}
+            </h2>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border: 2px solid #2e8b00;">
+            <h3 style="color: #2e8b00; margin-bottom: 1rem;">{{ tipo }}</h3>
+            
+            <div style="margin-bottom: 1rem;">
+                <strong>Nombre:</strong> {{ dorsal.nombre }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Número de dorsal:</strong> <span style="font-size: 1.5rem; color: #2e8b00; font-weight: bold;">{{ dorsal.num }}</span>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Talla de camiseta:</strong> {{ dorsal.talla }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Marcha:</strong> {{ marcha.lugar }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Fecha:</strong> {{ marcha.fecha|date:"d/m/Y H:i" }}
+            </div>
+        </div>
+        
+        {% if not dorsal.usado %}
+        <form method="post" style="text-align: center;">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                ✓ Registrar Participante
+            </button>
+        </form>
+        {% endif %}
+        
+    {% elif concierto %}
+        <div style="background: {% if entrada.usado %}#f8d7da{% else %}#d4edda{% endif %}; padding: 2rem; border-radius: 10px; margin-bottom: 2rem; border: 3px solid {% if entrada.usado %}#dc3545{% else %}#2e8b00{% endif %}; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">
+                {% if entrada.usado %}
+                    ❌
+                {% else %}
+                    ✅
+                {% endif %}
+            </div>
+            <h2 style="color: {% if entrada.usado %}#721c24{% else %}#155724{% endif %}; margin-bottom: 1rem;">
+                {% if entrada.usado %}
+                    ENTRADA YA USADA
+                {% else %}
+                    ENTRADA VÁLIDA
+                {% endif %}
+            </h2>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem; border: 2px solid #2e8b00;">
+            <h3 style="color: #2e8b00; margin-bottom: 1rem;">{{ tipo }}</h3>
+            
+            <div style="margin-bottom: 1rem;">
+                <strong>Nombre:</strong> {{ entrada.nombre }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Fila:</strong> {{ entrada.fila }} | <strong>Asiento:</strong> {{ entrada.asiento }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Concierto:</strong> {{ concierto.lugar }}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Fecha:</strong> {{ concierto.fecha|date:"d/m/Y H:i" }}
+            </div>
+        </div>
+        
+        {% if not entrada.usado %}
+        <form method="post" style="text-align: center;">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                ✓ Marcar como Usado
+            </button>
+        </form>
+        {% endif %}
+    {% endif %}
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="{% url 'home' %}" class="btn-primary">🏠 Volver al Inicio</a>
+    </div>
+</div>
+
+<a class="flechita" href="{% url 'home' %}"></a>
+{% endblock %}

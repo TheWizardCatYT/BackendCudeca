@@ -112,7 +112,7 @@ def comprar_entrada_cena(request, pk):
             cena.save()
 
             messages.success(request, f'¡Entrada comprada con éxito! Mesa {mesa.num_mesa}')
-            return redirect('detalle_cena', pk=pk)
+            return redirect('ticket_entrada_cena', pk=entrada.pk)
         else:
             messages.error(request, 'No hay asientos disponibles en esta mesa.')
 
@@ -150,7 +150,7 @@ def comprar_boleto(request, pk):
             rifa.save()
 
             messages.success(request, f'¡Boleto #{nuevo_num} comprado con éxito!')
-            return redirect('detalle_rifa', pk=pk)
+            return redirect('ticket_boleto', pk=boleto.pk)
         else:
             messages.error(request, 'No hay boletos disponibles.')
 
@@ -187,7 +187,7 @@ def inscribir_marcha(request, pk):
             marcha.save()
 
             messages.success(request, f'¡Inscripción exitosa! Dorsal #{nuevo_num}')
-            return redirect('detalle_marcha', pk=pk)
+            return redirect('ticket_dorsal', pk=dorsal.pk)
         else:
             messages.error(request, 'No hay plazas disponibles.')
 
@@ -229,7 +229,7 @@ def comprar_entrada_concierto(request, pk):
             concierto.save()
 
             messages.success(request, f'¡Entrada comprada! Fila {fila}, Asiento {asiento}')
-            return redirect('detalle_concierto', pk=pk)
+            return redirect('ticket_concierto', pk=entrada.pk)
         else:
             messages.error(request, 'Este asiento ya está ocupado.')
 
